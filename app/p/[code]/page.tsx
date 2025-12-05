@@ -18,7 +18,7 @@ type PublicPage = {
 }
 
 async function getPageByCode(code: string): Promise<PublicPage | null> {
-  const base = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8080"
+  const base = process.env.API_BASE_URL || "http://localhost:8080"
   const res = await fetch(`${base}/api/page/code/${code}`, { next: { revalidate } })
   if (res.status === 404) return null
   if (!res.ok) throw new Error(`Failed to fetch page: ${res.status}`)
