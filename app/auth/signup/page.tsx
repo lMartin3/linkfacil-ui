@@ -63,7 +63,7 @@ export default function SignUpPage() {
       </div>
       <form className="space-y-3" onSubmit={onSubmit}>
         <div className="space-y-1">
-          <label className="text-sm" htmlFor="username">Username</label>
+          <label className="text-sm" htmlFor="username">Full name</label>
           <input id="username" className="w-full rounded-md border bg-background px-3 py-2 text-sm" value={username} onChange={(e)=>setUsername(e.target.value)} required minLength={3} maxLength={20} />
         </div>
         <div className="space-y-1">

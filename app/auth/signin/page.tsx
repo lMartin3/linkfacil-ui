@@ -60,11 +60,12 @@
         </div>
         <form className="space-y-3" onSubmit={onSubmit}>
           <div className="space-y-1">
-            <label className="text-sm" htmlFor="usernameOrEmail">Username or Email</label>
+            <label className="text-sm" htmlFor="usernameOrEmail">Email</label>
             <input
               id="usernameOrEmail"
               className="w-full rounded-md border bg-background px-3 py-2 text-sm"
               value={usernameOrEmail}
+              type={"email"}
               onChange={(e) => setUsernameOrEmail(e.target.value)}
               required
             />
