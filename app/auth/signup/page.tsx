@@ -4,10 +4,13 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth-context"
+import {GoogleButton} from "@/app/auth/GoogleButton";
+import {signInWithPopup} from "firebase/auth";
+import {auth, googleProvider} from "@/lib/firebase";
 
 export default function SignUpPage() {
   const router = useRouter()
-  const { signup, user } = useAuth()
+  const { signup, user, signinWithFirebase } = useAuth()
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -27,9 +30,26 @@ export default function SignUpPage() {
     try {
       await signup({ username, email, password })
       setSuccess("Registered successfully. Please check your email to verify your account, then sign in.")
-      setTimeout(() => router.push("/auth/signin"), 800)
     } catch (err: any) {
       setError(err.message || "Failed to sign up")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const signInWithGoogle = async () => {
+    setError(null)
+    setLoading(true)
+
+    const result = await signInWithPopup(auth, googleProvider);
+
+    const idToken = await result.user.getIdToken();
+
+    try {
+      await signinWithFirebase({idToken: idToken})
+      router.push("/")
+    } catch (err: any) {
+      setError(err.message || "Failed to sign in")
     } finally {
       setLoading(false)
     }
@@ -58,6 +78,7 @@ export default function SignUpPage() {
         {success && <div className="text-sm text-green-600">{success}</div>}
         <Button type="submit" disabled={loading}>{loading ? 'Signing up...' : 'Sign up'}</Button>
       </form>
+      <GoogleButton disabled={loading} onClick={signInWithGoogle} />
       <div className="text-sm">Already have an account? <a className="underline" href="/auth/signin">Log in</a></div>
     </div>
   )

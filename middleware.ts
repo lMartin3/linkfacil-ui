@@ -11,7 +11,7 @@ function isStaticAsset(pathname: string) {
 export function middleware(req: NextRequest) {
   const { pathname, searchParams } = req.nextUrl
 
-  const isAuthPage = pathname === '/auth/signin' || pathname === '/auth/signup'
+  const isAuthPage = pathname === '/auth/signin' || pathname === '/auth/signup' || pathname === '/auth/verify'
   const isAuthApi = pathname.startsWith('/api/auth/')
   const isPageView = pathname.startsWith('/p')
   const isStatic = isStaticAsset(pathname)

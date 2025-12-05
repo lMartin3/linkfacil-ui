@@ -19,8 +19,8 @@ export type FirebaseLoginRequest = {
 export type AuthUser = {
   id: string
   username: string
-  fullName: string
   email: string
+  fullName?: string
 }
 
 export type CreatePageRequest = {
@@ -61,17 +61,22 @@ async function request<T>(path: string, init: RequestInit = {}) {
     'Content-Type': 'application/json',
     ...(init.headers || {}),
   }
-  console.log("AAAAAAAAAAAAAA")
+    console.log("RAHHH00 " + path)
   const res = await fetch(url, { ...init, headers, cache: 'no-store' })
   const text = await res.text()
+    console.log("RAHHH111")
   const data = text ? JSON.parse(text) : null
+    console.log("RAHHH222")
   if (!res.ok) {
     console.log(`Res code ${res.status}`)
+    console.log(text)
     const msg = (data && (data.message || data.error)) || `Request failed: ${res.status}`
     throw new Error(msg)
   }
   return data as T
 }
+
+import { signinAction, signinWithFirebaseAction, signoutAction } from "@/lib/server/actions/auth"
 
 export const api = {
   signup(body: SignupRequest) {
@@ -81,22 +86,17 @@ export const api = {
     })
   },
   signin(body: LoginRequest) {
-    return request<AuthUser>(`/api/auth/signin`, {
-      method: 'POST',
-      body: JSON.stringify(body),
-    })
+    console.log("Signin...")
+    return signinAction(body) as unknown as Promise<AuthUser>
   },
   signinWithFirebase(body: FirebaseLoginRequest) {
-    return request<AuthUser>(`/api/auth/signin/firebase`, {
-      method: 'POST',
-      body: JSON.stringify(body),
-    })
+    return signinWithFirebaseAction(body) as unknown as Promise<AuthUser>
   },
   me() {
     return request<AuthUser | null>(`/api/auth/me`)
   },
   signout() {
-    return request<MessageResponse>(`/api/auth/signout`, { method: 'POST' })
+    return signoutAction()
   },
   verify(token: string) {
     const q = new URLSearchParams({ token }).toString()
