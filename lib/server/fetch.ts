@@ -18,6 +18,9 @@ export async function backendFetch(path: string, init: RequestInit = {}, opts?: 
 export async function backendJson<T = never>(path: string, init: RequestInit = {}, opts?: { withAuth?: boolean }) {
   const res = await backendFetch(path, init, opts)
   const text = await res.text()
+  if(!res.ok) {
+    console.log(text)
+  }
   const data = text ? JSON.parse(text) : null
   if (!res.ok) {
     const msg = (data && (data.message || data.error)) || `Backend request failed: ${res.status}`
