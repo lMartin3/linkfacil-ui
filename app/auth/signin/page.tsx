@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth-context"
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
+import {GoogleButton} from "@/app/auth/signin/GoogleButton";
 
 export default function SignInPage() {
   const router = useRouter()
@@ -82,6 +83,7 @@ export default function SignInPage() {
         {error && <div className="text-sm text-destructive">{error}</div>}
         <Button type="submit" disabled={loading}>{loading ? 'Signing in...' : 'Sign in'}</Button>
         <Button type="button" disabled={loading} onClick={signInWithGoogle}>{loading ? 'Signing in...' : 'Sign in with firebasae'}</Button>
+        <GoogleButton disabled={loading} onClick={signInWithGoogle} />
       </form>
       <div className="text-sm">Don’t have an account? <a className="underline" href="/auth/signup">Sign up</a></div>
     </div>

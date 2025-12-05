@@ -19,6 +19,7 @@ export type FirebaseLoginRequest = {
 export type AuthUser = {
   id: string
   username: string
+  fullName: string
   email: string
 }
 
