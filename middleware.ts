@@ -15,12 +15,13 @@ export function middleware(req: NextRequest) {
   const isAuthApi = pathname.startsWith('/api/auth/')
   const isPageView = pathname.startsWith('/p')
   const isStatic = isStaticAsset(pathname)
+  const isMainPage = pathname === '/'
 
   const token = req.cookies.get(JWT_COOKIE)?.value
 
 
   if (!token) {
-    if (isAuthPage || isAuthApi || isStatic || isPageView) {
+    if (isAuthPage || isAuthApi || isStatic || isPageView || isMainPage) {
       return NextResponse.next()
     }
     const url = req.nextUrl.clone()
